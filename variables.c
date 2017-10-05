@@ -1,16 +1,32 @@
+#include <stdio.h>
 #include "variables.h"
+#include "trie.h"
 
-const char* lookup_variable( const char* key )
-{
-	// you should implement this function
+const Trie *root;
+
+const initialize_variable_table(void) {
+    root = create_node();
 }
 
-void set_variable( const char* key , const char* value )
-{
-	// you should implement this function
+const char *lookup_variable(const char *key) {
+    return get(root, key);
 }
 
-void print_all_variables( void )
-{
-	// you should implement this function
+void set_variable(const char *key, const char *value) {
+    insert(root, key, value);
+}
+
+void print_all_variables(void) {
+    print_variables_helper(root);
+}
+
+void print_variables_helper(Trie *node) {
+    if (node->val != NULL) {
+        printf("%s\n", node->val);
+    }
+    for (int i = 0; i < CHILDREN_SIZE; i++) {
+        if (node->children[i] != NULL) {
+            print_variables_helper(node->children[i]);
+        }
+    }
 }
