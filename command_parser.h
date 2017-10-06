@@ -1,5 +1,11 @@
 #ifndef COMMAND_PARSER_H   /* Include guard */
 #define COMMAND_PARSER_H
+#define MAX_COMMAND_LENGTH 512
+#if defined(WIN32) || defined(_WIN32)
+#define PATH_SEPARATOR "\\"
+#else
+#define PATH_SEPARATOR "/"
+#endif
 
 /* 
 	- This function should be responsible for importing all details of the command 
@@ -13,7 +19,8 @@
 	- Best practice is to use helper function for each collection of logical instructions,
 	  example: function for splitting the command by space into array of strings, ..etc
 */
-void parse_command( const char* command );  
+char **parse_command(char *command);
 
+char *get_command_path(char *command);
 
 #endif // COMMAND_PARSER_H
