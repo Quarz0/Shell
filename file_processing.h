@@ -1,3 +1,4 @@
+#include <stdio.h>
 #ifndef FILE_PROCESSING_H_   /* Include guard */
 #define FILE_PROCESSING_H_
 

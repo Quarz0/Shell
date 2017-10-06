@@ -11,6 +11,7 @@ void open_history_file()
 FILE* get_history_file()
 {
 	// you should implement this function
+    return NULL;
 }
 
 void close_history_file()
@@ -30,6 +31,7 @@ void open_log_file()
 FILE* get_log_file()
 {
 	// you should implement this function
+    return NULL;
 }
 
 void close_log_file()
@@ -49,6 +51,7 @@ void open_commands_batch_file()
 FILE* get_commands_batch_file()
 {
 	// you should implement this function
+    return NULL;
 }
 
 void close_commands_batch_file()
