@@ -3,8 +3,11 @@
 #include "trie.h"
 
 void insert(Trie *node, char *key, char *val){
+    if (val == NULL){
+        return;
+    }
     if (*key == '\0'){
-        node->val = malloc(sizeof(val));
+        node->val = malloc(sizeof(char) * (strlen(val) + 1));
         strcpy(node->val, val);
         return;
     }
