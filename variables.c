@@ -8,16 +8,12 @@ const initialize_variable_table(void) {
     root = create_node();
 }
 
-const char *lookup_variable(const char *key) {
+char *lookup_variable(const char *key) {
     return get(root, key);
 }
 
 void set_variable(const char *key, const char *value) {
     insert(root, key, value);
-}
-
-void print_all_variables(void) {
-    print_variables_helper(root);
 }
 
 void print_variables_helper(Trie *node) {
@@ -30,3 +26,8 @@ void print_variables_helper(Trie *node) {
         }
     }
 }
+
+void print_all_variables(void) {
+    print_variables_helper(root);
+}
+

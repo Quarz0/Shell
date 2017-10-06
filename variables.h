@@ -14,7 +14,7 @@ const initialize_variable_table(void);
 	  performance is not an issue since in practice we expect low number of variables,
 	  as a tip: simple array lookup would be fine
 */
-const char *lookup_variable(const char *key);
+char *lookup_variable(const char *key);
 
 /*
 	- This function should be responsible for setting the value of a variable

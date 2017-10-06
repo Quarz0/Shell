@@ -31,7 +31,9 @@ bool delete(Trie *node, char *key){
 
 char *get(Trie *node, char *key){
     if (*key == '\0'){
-        return node->val;
+        char* copy = malloc(sizeof(char) * (strlen(node->val) + 1));
+        strcpy(copy, node->val);
+        return copy;
     }
     if (node->children[(int) *key] == NULL) {
         return NULL;
