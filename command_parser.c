@@ -18,7 +18,7 @@ bool valid_var_char(char c) {
 }
 
 char *parse_vars(const char *command) {
-    char buffer[MAX_COMMAND_LENGTH + 1];
+    char buffer[MAX_COMMAND_LENGTH + 2];
     int index = 0;
     int buffer_index = 0;
     int var_index = -1;

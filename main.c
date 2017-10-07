@@ -47,7 +47,7 @@ void start(char *batch_file) {
 
 void shell_loop(bool input_from_file) {
     bool from_file = input_from_file;
-    char *buffer = malloc(sizeof(char) * (MAX_COMMAND_LENGTH + 1));
+    char *buffer = malloc(sizeof(char) * (MAX_BUFFER_SIZE + 1));
 
     while (true) {
         if (from_file) {
@@ -60,10 +60,14 @@ void shell_loop(bool input_from_file) {
 
         } else {
             printf("Shell> ");
-            if (fgets(buffer, MAX_COMMAND_LENGTH + 1, stdin) == NULL){
+            if (fgets(buffer, MAX_BUFFER_SIZE, stdin) == NULL){
                 // EOF (CTRL-D)
                 return;
             }
+        }
+        if (strlen(buffer) - 1 > MAX_COMMAND_LENGTH){
+            fprintf(stderr, "command is too long (over %d characters)\n", MAX_COMMAND_LENGTH);
+            continue;
         }
         char **command = parse_command(buffer);
         // handle special commands
