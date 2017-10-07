@@ -13,4 +13,6 @@ void setup_environment(void);
 
 char **get_env_variables(void);
 
+void add_env_variable(char *var);
+
 #endif // ENVIRONMENT_H_

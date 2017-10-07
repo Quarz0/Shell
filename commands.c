@@ -43,6 +43,25 @@ void printenv(const char *arg) {
     }
 }
 
+void export(const char *assignment) {
+    if (assignment == NULL || !strchr(assignment, '=')) {
+        return;
+    }
+    if (!isalpha(assignment[0])) {
+        error(assignment, "is not a valid identifier");
+        return;
+    }
+    int index = (int) (strchr(assignment, '=') - assignment);
+    char *key = malloc(sizeof(char) * (index + 1));
+    char val[strlen(assignment) - index + 1];
+    memcpy(key, assignment, index);
+    memcpy(val, assignment + index + 1, strlen(assignment) - index);
+    key[index] = '\0';
+    val[strlen(assignment) - index] = '\0';
+    set_variable(key, val);
+    add_env_variable(key);
+}
+
 void error(const char *command, const char *msg) {
     printf("%s: %s\n", command, msg);
 }

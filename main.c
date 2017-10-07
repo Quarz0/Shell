@@ -81,6 +81,11 @@ void shell_loop(bool input_from_file) {
             assign_variable(command[0]);
             continue;
         }
+        // export command
+        if (strcmp(command[0], "export") == 0){
+            export(command[1]);
+            continue;
+        }
 
         //parse your command here
         char *full_path = get_command_path(command[0]);

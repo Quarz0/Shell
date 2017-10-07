@@ -10,6 +10,8 @@ void assign_variable(const char *assignment);
 
 void printenv(const char *arg);
 
+void export(const char *assignment);
+
 void error(const char *command, const char *msg);
 
 #endif // COMMANDS_H_
