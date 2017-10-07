@@ -6,6 +6,7 @@
 #include "environment.h"
 #include "command_parser.h"
 #include "commands.h"
+#include "file_processing.h"
 
 #define MAX_BUFFER_SIZE 4096
 
@@ -27,17 +28,14 @@ int main(int argc, char *argv[]) {
     } else {
         start(NULL);
     }
-
+    close_commands_batch_file();
     return 0;
 }
 
 void start(char *batch_file) {
-
     if (batch_file != NULL) {
-        // file processing functions should be called from here
-//        open_commands_batch_file(batch_file);
-
-        shell_loop(true);
+        open_commands_batch_file(batch_file);
+        shell_loop(get_commands_batch_file() != NULL);
     } else {
         shell_loop(false);
     }
@@ -50,12 +48,19 @@ void shell_loop(bool input_from_file) {
 
     while (true) {
         if (from_file) {
-            //read next instruction from file
+            if (fgets(buffer, MAX_COMMAND_LENGTH + 1, get_commands_batch_file()) == NULL){
+                // EOF (CTRL-D)
+                from_file = false;
+                continue;
+            }
+            printf("> %s", buffer);
 
-            // if end of file {from_file = false; continue;}
         } else {
             printf("Shell> ");
-            fgets(buffer, MAX_COMMAND_LENGTH + 1, stdin);
+            if (fgets(buffer, MAX_COMMAND_LENGTH + 1, stdin) == NULL){
+                // EOF (CTRL-D)
+                return;
+            }
         }
         char **command = parse_command(buffer);
         // handle special commands
