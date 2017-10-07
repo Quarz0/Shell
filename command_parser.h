@@ -19,9 +19,9 @@
 	- Best practice is to use helper function for each collection of logical instructions,
 	  example: function for splitting the command by space into array of strings, ..etc
 */
-char **parse_command(char *command);
+char **parse_command(const char *command_);
 
-char *get_command_path(char *command);
+char *get_command_path(const char *command);
 
 bool is_background_command(void);
 
