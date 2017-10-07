@@ -23,6 +23,10 @@ int main(int argc, char *argv[]) {
     // any other early configuration should be here
     cd(NULL);
 
+    if (argc > 2){
+        fprintf(stderr, "Usage: %s <file path (optional)>\n", argv[0]);
+        return 2;
+    }
     if (argc > 1) {
         start(argv[1]);
     } else {
@@ -40,7 +44,6 @@ void start(char *batch_file) {
         shell_loop(false);
     }
 }
-
 
 void shell_loop(bool input_from_file) {
     bool from_file = input_from_file;

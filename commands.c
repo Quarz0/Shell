@@ -63,5 +63,5 @@ void export(const char *assignment) {
 }
 
 void error(const char *command, const char *msg) {
-    printf("%s: %s\n", command, msg);
+    fprintf(stderr, "%s: %s\n", command, msg);
 }

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "file_processing.h"
+#include "commands.h"
 
 FILE *commands = NULL;
 
@@ -43,7 +44,7 @@ void close_log_file() {
 void open_commands_batch_file(char *path) {
     commands = fopen(path, "r");
     if (commands == NULL) {
-        printf("%s: file not found\n", path);
+        error(path, "file not found");
     }
 }
 
