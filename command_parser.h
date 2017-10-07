@@ -23,4 +23,6 @@ char **parse_command(char *command);
 
 char *get_command_path(char *command);
 
+bool is_background_command(void);
+
 #endif // COMMAND_PARSER_H

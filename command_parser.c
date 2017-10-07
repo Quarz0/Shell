@@ -2,8 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdbool.h>
 #include "variables.h"
 #include "command_parser.h"
+
+bool background = false;
+
+bool is_background_command(void) {
+    return background;
+}
 
 char **parse_command(char *command) {
     char **args = (char **) malloc((strlen(command) + 1) * sizeof(char *));
@@ -22,9 +29,12 @@ char **parse_command(char *command) {
         }
         pch = strtok(NULL, " \n");
     }
-    if (index > 0 && args[index - 1][strlen(args[index - 1]) - 1] == '&') {
+    if (index > 0 && strlen(args[index - 1]) > 1 && args[index - 1][strlen(args[index - 1]) - 1] == '&') {
         args[index - 1][strlen(args[index - 1]) - 1] = '\0';
         args[index++] = "&";
+    }
+    if (background = (index > 0 && strcmp(args[index - 1], "&") == 0)) {
+        index--;
     }
     args[index] = NULL;
     return args;
@@ -46,3 +56,4 @@ char *get_command_path(char *command) {
     free(buffer);
     return NULL;
 }
+
