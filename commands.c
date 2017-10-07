@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include "variables.h"
 #include "commands.h"
+#include "environment.h"
 
 void cd(const char *path) {
     if (path == NULL || strcmp(path, "~") == 0) {
@@ -16,7 +17,7 @@ void cd(const char *path) {
 
 void assign_variable(const char *assignment) {
     if (!isalpha(assignment[0])) {
-        error(assignment);
+        error(assignment, "command not found");
         return;
     }
     int index = (int) (strchr(assignment, '=') - assignment);
@@ -29,6 +30,19 @@ void assign_variable(const char *assignment) {
     set_variable(key, val);
 }
 
-void error(const char *command) {
-    printf("shell: %s: command not found\n", command);
+void printenv(const char *arg) {
+    if (arg == NULL) {
+        for (int i = 0; get_env_variables()[i] != NULL; i++) {
+            char *val = lookup_variable(get_env_variables()[i]);
+            printf("%s=%s\n", get_env_variables()[i], val);
+            free(val);
+        }
+        printf("\n");
+    } else {
+        error(arg, "No such file or directory");
+    }
+}
+
+void error(const char *command, const char *msg) {
+    printf("%s: %s\n", command, msg);
 }

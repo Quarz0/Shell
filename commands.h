@@ -8,6 +8,8 @@ void cd(const char *path);
 
 void assign_variable(const char *assignment);
 
-void error(const char *command);
+void printenv(const char *arg);
+
+void error(const char *command, const char *msg);
 
 #endif // COMMANDS_H_

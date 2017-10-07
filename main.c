@@ -63,6 +63,10 @@ void shell_loop(bool input_from_file) {
         if (command[0] == NULL) {
             continue;
         }
+        if (strcmp(command[0], "printenv") == 0 || strcmp(command[0], "env") == 0) {
+            printenv(command[1]);
+            continue;
+        }
         // exit
         if (strcmp(command[0], "exit") == 0) {
             return;
@@ -87,7 +91,7 @@ void shell_loop(bool input_from_file) {
                 freopen("newin", "w", stdout);
             }
             execv(full_path, command);
-            error(command[0]);
+            error(command[0], "command not found");
             exit(1);
         } else {
             if (!is_background_command()) {
