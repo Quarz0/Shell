@@ -12,8 +12,15 @@
 void cd(char *path) {
     if (path == NULL || strcmp(path, "~") == 0) {
         char *home = lookup_variable("HOME");
-        chdir(home);
+        if (chdir(home) != 0){
+            error(path, "No such file or directory");
+        }
         free(home);
+    }
+    else {
+        if (chdir(path) != 0){
+            error(path, "No such file or directory");
+        }
     }
 }
 

@@ -8,6 +8,8 @@
 #include "commands.h"
 #include "file_processing.h"
 #include "variables.h"
+#include <sys/types.h>
+#include <sys/wait.h>
 
 void start_shell(bool read_from_file);
 

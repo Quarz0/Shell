@@ -4,7 +4,7 @@
 /*
 
  */
-const initialize_variable_table(void);
+void initialize_variable_table(void);
 
 /* 
 	- This function should be responsible for getting the value of a variable
@@ -14,12 +14,12 @@ const initialize_variable_table(void);
 	  performance is not an issue since in practice we expect low number of variables,
 	  as a tip: simple array lookup would be fine
 */
-char *lookup_variable(const char *key);
+char *lookup_variable(char *key);
 
 /*
 	- This function should be responsible for setting the value of a variable
 */
-void set_variable(const char *key, const char *value);
+void set_variable(char *key, char *value);
 
 
 /*

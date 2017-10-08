@@ -64,7 +64,7 @@ char **parse_command(const char *command_) {
         args[index - 1][strlen(args[index - 1]) - 1] = '\0';
         args[index++] = "&";
     }
-    if (background = (index > 0 && strcmp(args[index - 1], "&") == 0)) {
+    if ((background = (index > 0 && strcmp(args[index - 1], "&") == 0))) {
         index--;
     }
     args[index] = NULL;
@@ -92,7 +92,7 @@ char **parse_echo(char *command_) {
         args[index - 1][strlen(args[index - 1]) - 1] = '\0';
         args[index++] = "&";
     }
-    if (background = (index > 0 && strcmp(args[index - 1], "&") == 0)) {
+    if ((background = (index > 0 && strcmp(args[index - 1], "&") == 0))) {
         index--;
     }
     args[index] = NULL;

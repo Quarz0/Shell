@@ -5,15 +5,15 @@
 
 Trie *root;
 
-const initialize_variable_table(void) {
+void initialize_variable_table(void) {
     root = create_node();
 }
 
-char *lookup_variable(const char *key) {
+char *lookup_variable(char *key) {
     return get(root, key);
 }
 
-void set_variable(const char *key, const char *value) {
+void set_variable(char *key, char *value) {
     insert(root, key, value);
 }
 
