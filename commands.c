@@ -9,11 +9,14 @@
 #include "command_parser.h"
 #include "file_processing.h"
 
-void cd(const char *path) {
+void cd(char *path) {
     if (path == NULL || strcmp(path, "~") == 0) {
         char *home = lookup_variable("HOME");
         chdir(home);
         free(home);
+    }
+    if (path != NULL){
+        free(path);
     }
 }
 

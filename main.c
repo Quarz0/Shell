@@ -7,8 +7,7 @@
 #include "command_parser.h"
 #include "commands.h"
 #include "file_processing.h"
-
-
+#include "variables.h"
 
 void start_shell(bool read_from_file);
 
@@ -17,16 +16,15 @@ void shell_loop(bool input_from_file);
 void start(char *batch_file);
 
 int main(int argc, char *argv[]) {
-    setup_environment();
-
-    // any other early configuration should be here
-    cd(NULL);
-    open_history_file();
-
     if (argc > 2){
         fprintf(stderr, "Usage: %s <file path (optional)>\n", argv[0]);
         return 2;
     }
+
+    setup_environment();
+    cd(NULL);
+    open_history_file();
+
     if (argc > 1) {
         start(argv[1]);
     } else {
@@ -35,12 +33,14 @@ int main(int argc, char *argv[]) {
 
     close_commands_batch_file();
     close_history_file();
+    clear_variables();
     return 0;
 }
 
 void start(char *batch_file) {
     if (batch_file != NULL) {
         open_commands_batch_file(batch_file);
+        free(batch_file);
         shell_loop(get_commands_batch_file() != NULL);
     } else {
         shell_loop(false);
@@ -64,6 +64,7 @@ void shell_loop(bool input_from_file) {
             printf("Shell> ");
             if (fgets(buffer, MAX_BUFFER_SIZE, stdin) == NULL){
                 // EOF (CTRL-D)
+                free(buffer);
                 return;
             }
         }
@@ -84,6 +85,11 @@ void shell_loop(bool input_from_file) {
         }
         // exit
         if (strcmp(command[0], "exit") == 0) {
+            free(buffer);
+            for (int i = 0; command[i] != NULL; i++){
+                free(command[i]);
+            }
+            free(command);
             return;
         }
         // cd (change directory)

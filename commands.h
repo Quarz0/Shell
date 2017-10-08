@@ -4,7 +4,7 @@
 /* 
 	- This function should be responsible for implementing the "cd" shell command
 */
-void cd(const char *path);
+void cd(char *path);
 
 void assign_variable(const char *assignment);
 

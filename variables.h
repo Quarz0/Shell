@@ -29,4 +29,6 @@ void set_variable(const char *key, const char *value);
 */
 void print_all_variables(void);
 
+void clear_variables(void);
+
 #endif // VARIABLES_H_
