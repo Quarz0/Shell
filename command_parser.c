@@ -54,11 +54,11 @@ char **parse_command(const char *command_) {
     char **args = (char **) malloc((strlen(command) + 1) * sizeof(char *));
 
     char *pch;
-    pch = strtok(command, " \r\n");
+    pch = strtok(command, " \t\r\n");
     int index = 0;
     while (pch != NULL) {
         args[index++] = pch;
-        pch = strtok(NULL, " \r\n");
+        pch = strtok(NULL, " \t\r\n");
     }
     if (index > 0 && strlen(args[index - 1]) > 1 && args[index - 1][strlen(args[index - 1]) - 1] == '&') {
         args[index - 1][strlen(args[index - 1]) - 1] = '\0';
@@ -82,7 +82,7 @@ char **parse_echo(char *command_) {
     command[index + 4] = '\n';
 
     char *pch;
-    pch = strtok(command, " \r\n");
+    pch = strtok(command, " \t\r\n");
     index = 0;
     while (pch != NULL) {
         args[index++] = pch;
@@ -96,6 +96,31 @@ char **parse_echo(char *command_) {
         index--;
     }
     args[index] = NULL;
+
+    if (args[1] != NULL){
+        char *temp = malloc(sizeof(char) * (strlen(args[1]) + 1));
+        int k = 0;
+        int temp_index = 0;
+        bool in_quotes = false;
+        while (args[1][k] == ' ' || args[1][k] == '\t') k++;
+        while (args[1][k] != '\0'){
+            if (args[1][k] == '"' || args[1][k] == '\''){
+                in_quotes = !in_quotes;
+            }
+            else if (in_quotes){
+                temp[temp_index++] = args[1][k];
+            }
+            else if ((args[1][k] == ' ' || args[1][k] == '\t') && args[1][k-1] != ' ' && args[1][k-1] != '\t'){
+                temp[temp_index++] = ' ';
+            }
+            else if (args[1][k] != ' ' && args[1][k] != '\t'){
+                temp[temp_index++] = args[1][k];
+            }
+            k++;
+        }
+        temp[k] = '\0';
+        args[1] = temp;
+    }
     return args;
 }
 
