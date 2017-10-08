@@ -6,6 +6,10 @@
 /* 
 	history file basic functions' prototypes
 */
+void start_read_history_file();
+
+void finish_read_history_file();
+
 void open_history_file();
 
 FILE *get_history_file();

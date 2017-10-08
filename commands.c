@@ -6,6 +6,8 @@
 #include "variables.h"
 #include "commands.h"
 #include "environment.h"
+#include "command_parser.h"
+#include "file_processing.h"
 
 void cd(const char *path) {
     if (path == NULL || strcmp(path, "~") == 0) {
@@ -60,6 +62,16 @@ void export(const char *assignment) {
     val[strlen(assignment) - index] = '\0';
     set_variable(key, val);
     add_env_variable(key);
+}
+
+void history(){
+    start_read_history_file();
+    char buffer[MAX_BUFFER_SIZE + 1];
+    int cnt = 1;
+    while (fgets(buffer, MAX_BUFFER_SIZE, get_history_file()) != NULL){
+        printf("%d %s", cnt++, buffer);
+    }
+    finish_read_history_file();
 }
 
 void error(const char *command, const char *msg) {

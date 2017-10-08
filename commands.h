@@ -12,6 +12,8 @@ void printenv(const char *arg);
 
 void export(const char *assignment);
 
+void history(void);
+
 void error(const char *command, const char *msg);
 
 #endif // COMMANDS_H_

@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <stdbool.h>
 #include <ctype.h>
 #include "variables.h"
 #include "command_parser.h"

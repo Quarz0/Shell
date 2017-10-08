@@ -1,6 +1,8 @@
 #ifndef COMMAND_PARSER_H   /* Include guard */
 #define COMMAND_PARSER_H
 #define MAX_COMMAND_LENGTH 512
+#define MAX_BUFFER_SIZE 4096
+#include <stdbool.h>
 #if defined(WIN32) || defined(_WIN32)
 #define PATH_SEPARATOR "\\"
 #else

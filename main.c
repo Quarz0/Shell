@@ -8,7 +8,6 @@
 #include "commands.h"
 #include "file_processing.h"
 
-#define MAX_BUFFER_SIZE 4096
 
 
 void start_shell(bool read_from_file);
@@ -22,6 +21,7 @@ int main(int argc, char *argv[]) {
 
     // any other early configuration should be here
     cd(NULL);
+    open_history_file();
 
     if (argc > 2){
         fprintf(stderr, "Usage: %s <file path (optional)>\n", argv[0]);
@@ -32,7 +32,9 @@ int main(int argc, char *argv[]) {
     } else {
         start(NULL);
     }
+
     close_commands_batch_file();
+    close_history_file();
     return 0;
 }
 
@@ -51,7 +53,7 @@ void shell_loop(bool input_from_file) {
 
     while (true) {
         if (from_file) {
-            if (fgets(buffer, MAX_COMMAND_LENGTH + 1, get_commands_batch_file()) == NULL){
+            if (fgets(buffer, MAX_BUFFER_SIZE, get_commands_batch_file()) == NULL){
                 // EOF (CTRL-D)
                 from_file = false;
                 continue;
@@ -65,6 +67,7 @@ void shell_loop(bool input_from_file) {
                 return;
             }
         }
+        fprintf(get_history_file(), "%s", buffer);
         if (strlen(buffer) - 1 > MAX_COMMAND_LENGTH){
             fprintf(stderr, "command is too long (over %d characters)\n", MAX_COMMAND_LENGTH);
             continue;
@@ -96,6 +99,10 @@ void shell_loop(bool input_from_file) {
         // export command
         if (strcmp(command[0], "export") == 0){
             export(command[1]);
+            continue;
+        }
+        if (strcmp(command[0], "history") == 0){
+            history();
             continue;
         }
 
