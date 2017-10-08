@@ -16,11 +16,12 @@ void shell_loop(bool input_from_file);
 void start(char *batch_file);
 
 int main(int argc, char *argv[]) {
-    if (argc > 2){
+    if (argc > 2) {
         fprintf(stderr, "Usage: %s <file path (optional)>\n", argv[0]);
         return 2;
     }
 
+    signal(SIGCHLD, write_log_file);
     setup_environment();
     cd(NULL);
     open_history_file();
@@ -40,7 +41,6 @@ int main(int argc, char *argv[]) {
 void start(char *batch_file) {
     if (batch_file != NULL) {
         open_commands_batch_file(batch_file);
-        free(batch_file);
         shell_loop(get_commands_batch_file() != NULL);
     } else {
         shell_loop(false);
@@ -53,7 +53,7 @@ void shell_loop(bool input_from_file) {
 
     while (true) {
         if (from_file) {
-            if (fgets(buffer, MAX_BUFFER_SIZE, get_commands_batch_file()) == NULL){
+            if (fgets(buffer, MAX_BUFFER_SIZE, get_commands_batch_file()) == NULL) {
                 // EOF (CTRL-D)
                 from_file = false;
                 continue;
@@ -62,23 +62,24 @@ void shell_loop(bool input_from_file) {
 
         } else {
             printf("Shell> ");
-            if (fgets(buffer, MAX_BUFFER_SIZE, stdin) == NULL){
+            if (fgets(buffer, MAX_BUFFER_SIZE, stdin) == NULL) {
                 // EOF (CTRL-D)
                 free(buffer);
                 return;
             }
         }
         fprintf(get_history_file(), "%s", buffer);
-        if (strlen(buffer) - 1 > MAX_COMMAND_LENGTH){
+        if (strlen(buffer) - 1 > MAX_COMMAND_LENGTH) {
             fprintf(stderr, "command is too long (over %d characters)\n", MAX_COMMAND_LENGTH);
             continue;
         }
         char **command = parse_command(buffer);
         // handle special commands
-        // empty command
-        if (command[0] == NULL) {
+        // empty command or comment
+        if (command[0] == NULL || command[0][0] == '#') {
             continue;
         }
+        // print env variables
         if (strcmp(command[0], "printenv") == 0 || strcmp(command[0], "env") == 0) {
             printenv(command[1]);
             continue;
@@ -86,11 +87,15 @@ void shell_loop(bool input_from_file) {
         // exit
         if (strcmp(command[0], "exit") == 0) {
             free(buffer);
-            for (int i = 0; command[i] != NULL; i++){
+            for (int i = 0; command[i] != NULL; i++) {
                 free(command[i]);
             }
             free(command);
             return;
+        }
+        // echo
+        if (strcmp(command[0], "echo") == 0) {
+            command = parse_echo(buffer);
         }
         // cd (change directory)
         if (strcmp(command[0], "cd") == 0) {
@@ -103,11 +108,12 @@ void shell_loop(bool input_from_file) {
             continue;
         }
         // export command
-        if (strcmp(command[0], "export") == 0){
+        if (strcmp(command[0], "export") == 0) {
             export(command[1]);
             continue;
         }
-        if (strcmp(command[0], "history") == 0){
+        // history
+        if (strcmp(command[0], "history") == 0) {
             history();
             continue;
         }
@@ -118,7 +124,7 @@ void shell_loop(bool input_from_file) {
         pid_t child_pid = fork();
         if (child_pid == 0) {
             if (is_background_command()) {
-                freopen("newin", "w", stdout);
+                freopen(".temp", "w", stdout);
             }
             execv(full_path, command);
             error(command[0], "command not found");

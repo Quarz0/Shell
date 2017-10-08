@@ -54,11 +54,39 @@ char **parse_command(const char *command_) {
     char **args = (char **) malloc((strlen(command) + 1) * sizeof(char *));
 
     char *pch;
-    pch = strtok(command, " \n");
+    pch = strtok(command, " \r\n");
     int index = 0;
     while (pch != NULL) {
         args[index++] = pch;
-        pch = strtok(NULL, " \n");
+        pch = strtok(NULL, " \r\n");
+    }
+    if (index > 0 && strlen(args[index - 1]) > 1 && args[index - 1][strlen(args[index - 1]) - 1] == '&') {
+        args[index - 1][strlen(args[index - 1]) - 1] = '\0';
+        args[index++] = "&";
+    }
+    if (background = (index > 0 && strcmp(args[index - 1], "&") == 0)) {
+        index--;
+    }
+    args[index] = NULL;
+    return args;
+}
+
+char **parse_echo(char *command_) {
+    char *command = parse_vars(command_);
+    char **args = (char **) malloc((strlen(command) + 1) * sizeof(char *));
+    int index = 0;
+    while (*(command + index) == ' ' || *(command + index) == '\t') {
+        index++;
+    }
+    // index now is at 'e' in echo
+    command[index + 4] = '\n';
+
+    char *pch;
+    pch = strtok(command, " \r\n");
+    index = 0;
+    while (pch != NULL) {
+        args[index++] = pch;
+        pch = strtok(NULL, "\r\n");
     }
     if (index > 0 && strlen(args[index - 1]) > 1 && args[index - 1][strlen(args[index - 1]) - 1] == '&') {
         args[index - 1][strlen(args[index - 1]) - 1] = '\0';
@@ -84,7 +112,7 @@ char *get_command_path(const char *command) {
         }
         pch = strtok(NULL, ":");
     }
-    free(buffer);
-    return NULL;
+    memcpy(buffer, command, strlen(command) + 1);
+    return buffer;
 }
 

@@ -23,6 +23,8 @@
 */
 char **parse_command(const char *command_);
 
+char **parse_echo(char *command_);
+
 char *get_command_path(const char *command);
 
 bool is_background_command(void);

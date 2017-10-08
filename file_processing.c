@@ -8,12 +8,12 @@ FILE *history_file = NULL;
 /*
 	history file section
 */
-void start_read_history_file(){
+void start_read_history_file() {
     close_history_file();
     history_file = fopen(".history", "r");
 }
 
-void finish_read_history_file(){
+void finish_read_history_file() {
     close_history_file();
     open_history_file();
 }
@@ -36,21 +36,13 @@ void close_history_file() {
 /* 
 	log file section
 */
-void open_log_file() {
-    // you should implement this function
+void write_log_file() {
+    FILE *log = fopen(".log", "a");
+    fprintf(log, "Child process was terminated.\n");
+    fclose(log);
 }
 
-FILE *get_log_file() {
-    // you should implement this function
-    return NULL;
-}
-
-void close_log_file() {
-    // you should implement this function
-}
-
-
-/* 
+/*
 	CommandsBatch file section
 */
 void open_commands_batch_file(char *path) {
