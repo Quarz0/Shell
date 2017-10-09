@@ -5,9 +5,6 @@
 FILE *commands_file = NULL;
 FILE *history_file = NULL;
 
-/*
-	history file section
-*/
 void start_read_history_file() {
     close_history_file();
     history_file = fopen(".history", "r");
@@ -32,19 +29,12 @@ void close_history_file() {
     }
 }
 
-
-/* 
-	log file section
-*/
 void write_log_file() {
     FILE *log = fopen(".log", "a");
     fprintf(log, "Child process was terminated.\n");
     fclose(log);
 }
 
-/*
-	CommandsBatch file section
-*/
 void open_commands_batch_file(char *path) {
     commands_file = fopen(path, "r");
     if (commands_file == NULL) {

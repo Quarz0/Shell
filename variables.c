@@ -32,7 +32,7 @@ void print_all_variables(void) {
     print_variables_helper(root);
 }
 
-void clear_helper(Trie *node){
+void clear_helper(Trie *node) {
     if (node->val != NULL) {
         free(node->val);
     }

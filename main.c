@@ -11,8 +11,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-void start_shell(bool read_from_file);
-
 void shell_loop(bool input_from_file);
 
 void start(char *batch_file);
@@ -23,10 +21,11 @@ int main(int argc, char *argv[]) {
         return 2;
     }
 
-    signal(SIGCHLD, write_log_file);
+    // setup environment and necessary configurations
     setup_environment();
-    cd(NULL);
+    signal(SIGCHLD, write_log_file);
     open_history_file();
+    cd(NULL);
 
     if (argc > 1) {
         start(argv[1]);
@@ -34,6 +33,7 @@ int main(int argc, char *argv[]) {
         start(NULL);
     }
 
+    // close open files and clear memory allocated for variables
     close_commands_batch_file();
     close_history_file();
     clear_variables();
@@ -43,6 +43,7 @@ int main(int argc, char *argv[]) {
 void start(char *batch_file) {
     if (batch_file != NULL) {
         open_commands_batch_file(batch_file);
+        // if batch_file doesn't exist input_from_file param will be set to false
         shell_loop(get_commands_batch_file() != NULL);
     } else {
         shell_loop(false);
@@ -56,7 +57,7 @@ void shell_loop(bool input_from_file) {
     while (true) {
         if (from_file) {
             if (fgets(buffer, MAX_BUFFER_SIZE, get_commands_batch_file()) == NULL) {
-                // EOF (CTRL-D)
+                // EOF was reached
                 from_file = false;
                 continue;
             }
@@ -65,12 +66,13 @@ void shell_loop(bool input_from_file) {
         } else {
             printf("Shell> ");
             if (fgets(buffer, MAX_BUFFER_SIZE, stdin) == NULL) {
-                // EOF (CTRL-D)
+                // EOF (CTRL-D) was entered by user
                 free(buffer);
                 return;
             }
         }
         fprintf(get_history_file(), "%s", buffer);
+        // check if command exceed max length
         if (strlen(buffer) - 1 > MAX_COMMAND_LENGTH) {
             fprintf(stderr, "command is too long (over %d characters)\n", MAX_COMMAND_LENGTH);
             continue;
@@ -120,15 +122,20 @@ void shell_loop(bool input_from_file) {
             continue;
         }
 
-        //parse your command here
+        // get the full path of the command
         char *full_path = get_command_path(command[0]);
 
+        // start new child process
         pid_t child_pid = fork();
         if (child_pid == 0) {
+            // if background command, execute in background by directing output to temp file instead of stdout
             if (is_background_command()) {
                 freopen(".temp", "w", stdout);
             }
+            // execute command
             execv(full_path, command);
+
+            // if command executed successfully it should reach this line
             error(command[0], "command not found");
             exit(1);
         } else {
@@ -139,12 +146,5 @@ void shell_loop(bool input_from_file) {
             free(command);
             free(full_path);
         }
-
-        //execute your command here
-
-        /*
-            you don't need to write all logic here, a better practice is to call functions,
-            each one contains a coherent set of logical instructions
-        */
     }
 }

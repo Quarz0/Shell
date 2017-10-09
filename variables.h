@@ -2,33 +2,28 @@
 #define VARIABLES_H_
 
 /*
-
+ * create a new Trie
  */
 void initialize_variable_table(void);
 
-/* 
-	- This function should be responsible for getting the value of a variable
-	- To execute commands, You must always search for the executable files 
-	  in the value returned by lookup_variable("PATH");
-	- Your code must be dynamic and can handle any number of variables, However,
-	  performance is not an issue since in practice we expect low number of variables,
-	  as a tip: simple array lookup would be fine
-*/
+/*
+ * looks up a variable in the Trie root and return its value or NULL if it doesn't exist
+ */
 char *lookup_variable(char *key);
 
 /*
-	- This function should be responsible for setting the value of a variable
+ * sets the value of a variable by inserting it into the Trie
 */
 void set_variable(char *key, char *value);
 
-
 /*
-	[OPTIONAL] Doesn't affect the code logic
-	- This is a helper function to print all your variables
-	- Might help much in the debugging or testing
+ * prints all the variables stored including the environment variables
 */
 void print_all_variables(void);
 
+/*
+ * clears memory allocated in the Trie and deletes all variables from memory
+ */
 void clear_variables(void);
 
 #endif // VARIABLES_H_
