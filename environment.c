@@ -18,7 +18,12 @@ char **get_env_variables(void) {
 }
 
 void add_env_variable(char *var) {
-    char **env_variables_new = malloc(sizeof(env_variables) + sizeof(var) + sizeof(char*) + 1);
+    for (int i = 0; env_variables[i] != NULL; i++) {
+        if (strcmp(env_variables[i], var) == 0) {
+            return;
+        }
+    }
+    char **env_variables_new = malloc(sizeof(env_variables) + sizeof(var) + sizeof(char *) + 1);
     int index = 0;
     while (env_variables[index] != NULL) {
         env_variables_new[index] = env_variables[index];
