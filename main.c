@@ -55,6 +55,7 @@ void shell_loop(bool input_from_file) {
     char *buffer = malloc(sizeof(char) * (MAX_BUFFER_SIZE + 1));
 
     while (true) {
+        memset(buffer, 0, sizeof buffer);
         if (from_file) {
             if (fgets(buffer, MAX_BUFFER_SIZE, get_commands_batch_file()) == NULL) {
                 // EOF was reached
