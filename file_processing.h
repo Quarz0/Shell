@@ -4,17 +4,7 @@
 #define FILE_PROCESSING_H_
 
 /*
- * close history file and reopen it in read mode
- */
-void start_read_history_file();
-
-/*
- * close history file and reopen it in append mode
- */
-void finish_read_history_file();
-
-/*
- * open history file in append mode
+ * open history file in append and read modes
  */
 void open_history_file();
 

@@ -73,6 +73,7 @@ void shell_loop(bool input_from_file) {
             }
         }
         fprintf(get_history_file(), "%s", buffer);
+        fflush(get_history_file());
         // check if command exceed max length
         if (strlen(buffer) - 1 > MAX_COMMAND_LENGTH) {
             fprintf(stderr, "command is too long (over %d characters)\n", MAX_COMMAND_LENGTH);

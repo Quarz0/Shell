@@ -5,18 +5,8 @@
 FILE *commands_file = NULL;
 FILE *history_file = NULL;
 
-void start_read_history_file() {
-    close_history_file();
-    history_file = fopen(".history", "r");
-}
-
-void finish_read_history_file() {
-    close_history_file();
-    open_history_file();
-}
-
 void open_history_file() {
-    history_file = fopen(".history", "a");
+    history_file = fopen(".history", "a+");
 }
 
 FILE *get_history_file() {

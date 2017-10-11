@@ -81,14 +81,15 @@ void export(const char *assignment) {
 }
 
 void history() {
-    // open history file in read mode and print its content
-    start_read_history_file();
     char buffer[MAX_BUFFER_SIZE + 1];
     int cnt = 1;
-    while (fgets(buffer, MAX_BUFFER_SIZE, get_history_file()) != NULL) {
+    memset(buffer, 0, sizeof(buffer));
+    rewind(get_history_file());
+    while (!feof(get_history_file())){
+        fgets(buffer, MAX_BUFFER_SIZE, get_history_file());
         printf("%d %s", cnt++, buffer);
+        memset(buffer, 0, sizeof(buffer));
     }
-    finish_read_history_file();
 }
 
 
