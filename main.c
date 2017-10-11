@@ -52,10 +52,10 @@ void start(char *batch_file) {
 
 void shell_loop(bool input_from_file) {
     bool from_file = input_from_file;
-    char *buffer = malloc(sizeof(char) * (MAX_BUFFER_SIZE + 1));
+    char buffer[MAX_BUFFER_SIZE + 1];
 
     while (true) {
-        memset(buffer, 0, sizeof buffer);
+        memset(buffer, 0, sizeof(buffer));
         if (from_file) {
             if (fgets(buffer, MAX_BUFFER_SIZE, get_commands_batch_file()) == NULL) {
                 // EOF was reached
@@ -68,7 +68,6 @@ void shell_loop(bool input_from_file) {
             printf("Shell> ");
             if (fgets(buffer, MAX_BUFFER_SIZE, stdin) == NULL) {
                 // EOF (CTRL-D) was entered by user
-                free(buffer);
                 return;
             }
         }
@@ -92,7 +91,6 @@ void shell_loop(bool input_from_file) {
         }
         // exit
         if (strcmp(command[0], "exit") == 0) {
-            free(buffer);
             for (int i = 0; command[i] != NULL; i++) {
                 free(command[i]);
             }
