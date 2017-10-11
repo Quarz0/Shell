@@ -18,9 +18,21 @@ void cd(char *path) {
         }
         free(home);
     }
-    // cd to given path if exists
+    // cd to given path if exists, replacing ~ with value of $HOME
     else {
-        if (chdir(path) != 0) {
+        char buffer[MAX_BUFFER_SIZE + 1];
+        int index = 0;
+        while (path[index] == ' ' || path[index] == '\t') index++;
+        if (path[index] == '~'){
+            char *home = lookup_variable("HOME");
+            memcpy(buffer, home, strlen(home) + 1);
+            strcat(buffer, path + index + 1);
+            free(home);
+        }
+        else {
+            memcpy(buffer, path, strlen(path) + 1);
+        }
+        if (chdir(buffer) != 0) {
             error(path, "No such file or directory");
         }
     }
